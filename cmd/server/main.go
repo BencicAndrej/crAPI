@@ -27,7 +27,6 @@ func LoadRoutes(router *router.Router) error {
 	}
 
 	t := T{}
-
 	err = yaml.Unmarshal(fileContents, &t)
 	if err != nil {
 		return err
@@ -47,21 +46,6 @@ func main() {
 	router := router.New()
 
 	LoadRoutes(router)
-
-	router.Register("GET", "/hello/first", func(rw http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(rw, "Hey")
-	})
-
-	router.Register("POST", "/hello/haj", func(rw http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(rw, "Haj")
-	})
-	router.Register("POST", "/hello/haj", func(rw http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(rw, "Haj")
-	})
-
-	router.Register("DELETE", "/hello/briga", func(rw http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(rw, "Bas nas briga")
-	})
 
 	fmt.Println("Starting up server...")
 	log.Fatal(http.ListenAndServe(":3000", router))

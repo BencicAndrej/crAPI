@@ -8,5 +8,26 @@ routes:
         output: "First"
     -
         method: GET
-        path: /second
-        output: "Second"
+        path: /second/{clientId}
+        output: bash.sh
+        arguments:
+            {{url}}
+            {{method}}
+            {{clientId}}
+            {{dc}}
+    -
+        method: GET
+        path: /lazar
+        output: handleTHatRoute
+    -
+        method: GET
+        path: /second/{clientId}
+        response:
+            script: bash.sh (stdout, stderr = za HTTP status kodove)
+                arguments:
+                    {{url}}
+                    {{method}}
+                    {{clientId}}
+                    {{dc}}
+            string:
+
