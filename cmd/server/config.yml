@@ -1,0 +1,12 @@
+---
+default:
+    prefix: /api/v1
+routes:
+    -
+        method: GET
+        path: /first
+        output: "First"
+    -
+        method: GET
+        path: /second
+        output: "Second"
