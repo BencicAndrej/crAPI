@@ -1,6 +1,33 @@
 ---
 default:
     prefix: /api/v1
+rotues:
+    WelcomeRoute:
+        method: GET
+        path: /hello/{name}/welcome # Traditional routing
+        response: #For short you can specify the string here. Eg. response: "Hello World!"
+            type: raw
+            output: "Hi {name}, nice to meet you!"
+    KeyValuePut:
+        method: PUT
+        path: {key}
+        ignoreSlash: true
+        response:
+            type: execute
+            path: "scripts/sKV"
+            arguments:
+                - %path%
+                - %body%
+
+routes:
+    KeyValuePut:
+        method: PUT
+        path: /{key}
+        escapeSlash: true #If set to true path "/{key}" will match "/something" as well as "/something/else"
+        response: "Hello World"
+    KeyValueGet:
+        method: GET
+        path: /{(.*)}
 routes:
     -
         method: GET
@@ -30,4 +57,3 @@ routes:
                     {{clientId}}
                     {{dc}}
             string:
-
