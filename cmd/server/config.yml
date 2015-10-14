@@ -1,59 +1,59 @@
 ---
-default:
-    prefix: /api/v1
-rotues:
-    WelcomeRoute:
+defaults:
+    port: 8080
+routes:
+    -
         method: GET
-        path: /hello/{name}/welcome # Traditional routing
-        response: #For short you can specify the string here. Eg. response: "Hello World!"
-            type: raw
-            output: "Hi {name}, nice to meet you!"
-    KeyValuePut:
-        method: PUT
-        path: {key}
+        path: /test/text
+        text: "Data"
+#    -
+#        method: GET
+#        path: /hello/{name}/welcome # Traditional routing
+#        text: "Hi {name}, nice to meet you!"
+    -
+        method: GET
+        path: /test/script
         ignoreSlash: true
-        response:
-            type: execute
-            path: "scripts/sKV"
-            arguments:
-                - %path%
-                - %body%
+        command: "example.php"
+#            arguments:
+#                - %path%
+#                - %body%
 
-routes:
-    KeyValuePut:
-        method: PUT
-        path: /{key}
-        escapeSlash: true #If set to true path "/{key}" will match "/something" as well as "/something/else"
-        response: "Hello World"
-    KeyValueGet:
-        method: GET
-        path: /{(.*)}
-routes:
-    -
-        method: GET
-        path: /first
-        output: "First"
-    -
-        method: GET
-        path: /second/{clientId}
-        output: bash.sh
-        arguments:
-            {{url}}
-            {{method}}
-            {{clientId}}
-            {{dc}}
-    -
-        method: GET
-        path: /lazar
-        output: handleTHatRoute
-    -
-        method: GET
-        path: /second/{clientId}
-        response:
-            script: bash.sh (stdout, stderr = za HTTP status kodove)
-                arguments:
-                    {{url}}
-                    {{method}}
-                    {{clientId}}
-                    {{dc}}
-            string:
+#routes:
+#    KeyValuePut:
+#        method: PUT
+#        path: /{key}
+#        escapeSlash: true #If set to true path "/{key}" will match "/something" as well as "/something/else"
+#        response: "Hello World"
+#    KeyValueGet:
+#        method: GET
+#        path: /{(.*)}
+#routes:
+#    -
+#        method: GET
+#        path: /first
+#        output: "First"
+#    -
+#        method: GET
+#        path: /second/{clientId}
+#        output: bash.sh
+#        arguments:
+#            {{url}}
+#            {{method}}
+#            {{clientId}}
+#            {{dc}}
+#    -
+#        method: GET
+#        path: /lazar
+#        output: handleTHatRoute
+#    -
+#        method: GET
+#        path: /second/{clientId}
+#        response:
+#            script: bash.sh (stdout, stderr = za HTTP status kodove)
+#                arguments:
+#                    {{url}}
+#                    {{method}}
+#                    {{clientId}}
+#                    {{dc}}
+#            string:
