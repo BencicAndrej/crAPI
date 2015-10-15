@@ -1,0 +1,12 @@
+---
+defaults:
+    port: 8080
+routes:
+    -
+        method: GET
+        path: /test/text
+        string: "Data"
+#    -
+#        method: GET
+#        path: /hello/{name}/welcome # Traditional routing
+#        text: "Hi {name}, nice to meet you!"

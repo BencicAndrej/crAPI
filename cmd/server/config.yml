@@ -1,20 +1,20 @@
 ---
 defaults:
-    port: 8080
+    port: 8765
 routes:
     -
         method: GET
         path: /test/text
-        text: "Data"
+        string: "Data"
 #    -
 #        method: GET
 #        path: /hello/{name}/welcome # Traditional routing
 #        text: "Hi {name}, nice to meet you!"
     -
         method: GET
-        path: /test/script
+        path: /test/python
         ignoreSlash: true
-        command: "example.php"
+        command: "python ../../examples/hello.py"
 #            arguments:
 #                - %path%
 #                - %body%

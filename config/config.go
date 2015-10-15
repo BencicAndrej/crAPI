@@ -15,7 +15,7 @@ type RouteConfig struct {
 	Method             string `yaml:"method"`
 	Path               string `yaml:"path"`
 	String             string `yaml:"string"`
-	File               string `yaml:"string"`
+	File               string `yaml:"file"`
 	MultipartVariables bool   `yaml:"multipartVariables"`
 	Command            string `yaml: "command"`
 }
@@ -30,25 +30,25 @@ type Config struct {
 func Load(configPath string) (config Config, err error) {
 	fileContents, err := ioutil.ReadFile(configPath)
 	if err != nil {
-		return nil, err
+		return config, err
 	}
 
 	err = yaml.Unmarshal(fileContents, &config)
 	if err != nil {
-		return nil, err
+		return config, err
 	}
 
 	return config, nil
 }
 
-func (config Config) ParseRoutes() (routes []router.Route, err error) {
+func (config Config) ParseRoutes() (routes []*router.Route, err error) {
 	for _, route := range config.Routes {
 		handler, err := resolveHandler(route)
 		if err != nil {
 			return nil, err
 		}
 
-		routes = append(routes, router.Route{
+		routes = append(routes, &router.Route{
 			Method:             route.Method,
 			Path:               route.Path,
 			MultiPartVariables: route.MultipartVariables,
@@ -56,7 +56,7 @@ func (config Config) ParseRoutes() (routes []router.Route, err error) {
 		})
 	}
 
-	return nil, nil
+	return routes, nil
 }
 
 func resolveHandler(rConf RouteConfig) (handler http.HandlerFunc, err error) {
@@ -76,16 +76,16 @@ func resolveHandler(rConf RouteConfig) (handler http.HandlerFunc, err error) {
 }
 
 func newCommandHandler(commandString string) http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Response) {
+	return func(rw http.ResponseWriter, r *http.Request) {
 		//@TODO: See how supervisor handles command input. #srama#bez
 
 		commandParts := strings.Split(commandString, " ")
 
-		command := exec.Command(commandParts...)
+		command := exec.Command(commandParts[0], commandParts[1:]...)
 
 		output, err := command.Output()
 		if err != nil {
-			log.Panic(err)
+			log.Println(err)
 		}
 
 		fmt.Fprint(rw, string(output))
@@ -98,11 +98,11 @@ func newFileHandler(path string) (handler http.HandlerFunc, err error) {
 		return nil, err
 	}
 
-	return newStringHandler(body)
+	return newStringHandler(string(body)), err
 }
 
 func newStringHandler(body string) http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Response) {
+	return func(rw http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(rw, body)
 	}
 }
