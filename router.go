@@ -4,7 +4,6 @@ import (
 	"net/http"
 	"log"
 	"regexp"
-	"strings"
 )
 
 type Route struct {
@@ -23,16 +22,16 @@ func New() *Router {
 
 func (router *Router) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	for _, route := range router.routes[r.Method] {
-		if !route.MultiPartVariables {
-			reg, err := regexp.Compile("{.*}")
-
-			regexdString := reg.ReplaceAllString(route.Path, "")
-
-			parts := strings.Split(route.Path, "/")
-		} else {
-
-		}
-		matched, err := regexp.Match(route.Path, r.URL.Path)
+//		if !route.MultiPartVariables {
+//			reg, err := regexp.Compile("{.*}")
+//
+//			regexdString := reg.ReplaceAllString(route.Path, "")
+//
+//			parts := strings.Split(route.Path, "/")
+//		} else {
+//
+//		}
+		matched, err := regexp.Match(route.Path, []byte(r.URL.Path))
 		if err != nil {
 			log.Print(err)
 		}

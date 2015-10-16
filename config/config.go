@@ -98,7 +98,14 @@ func newFileHandler(path string) (handler http.HandlerFunc, err error) {
 		return nil, err
 	}
 
-	return newStringHandler(string(body)), err
+	return func(rw http.ResponseWriter, r *http.Request) {
+		if strings.Split(path, ".")[len(strings.Split(path, ".")) - 1] == "json" {
+			rw.Header().Add("Content-Type", "application/json")
+		}
+
+		fmt.Fprintf(rw, string(body))
+	}, err
+//	return newStringHandler(string(body)), err
 }
 
 func newStringHandler(body string) http.HandlerFunc {
